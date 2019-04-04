@@ -15,6 +15,8 @@
 		147223842255EC2C002BDAC2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 147223832255EC2C002BDAC2 /* main.m */; };
 		1472238E2255EC2C002BDAC2 /* EKGGraphics_masterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1472238D2255EC2C002BDAC2 /* EKGGraphics_masterTests.m */; };
 		147223992255EC2C002BDAC2 /* EKGGraphics_masterUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 147223982255EC2C002BDAC2 /* EKGGraphics_masterUITests.m */; };
+		147223A82255EC55002BDAC2 /* HeartGraphicsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 147223A72255EC55002BDAC2 /* HeartGraphicsView.m */; };
+		147223AA22560554002BDAC2 /* LBEData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 147223A922560554002BDAC2 /* LBEData.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,9 @@
 		147223942255EC2C002BDAC2 /* EKGGraphics-masterUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "EKGGraphics-masterUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		147223982255EC2C002BDAC2 /* EKGGraphics_masterUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EKGGraphics_masterUITests.m; sourceTree = "<group>"; };
 		1472239A2255EC2C002BDAC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		147223A62255EC55002BDAC2 /* HeartGraphicsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeartGraphicsView.h; sourceTree = "<group>"; };
+		147223A72255EC55002BDAC2 /* HeartGraphicsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HeartGraphicsView.m; sourceTree = "<group>"; };
+		147223A922560554002BDAC2 /* LBEData.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LBEData.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,10 +106,13 @@
 		147223732255EC2A002BDAC2 /* EKGGraphics-master */ = {
 			isa = PBXGroup;
 			children = (
+				147223A922560554002BDAC2 /* LBEData.txt */,
 				147223742255EC2A002BDAC2 /* AppDelegate.h */,
 				147223752255EC2A002BDAC2 /* AppDelegate.m */,
 				147223772255EC2A002BDAC2 /* ViewController.h */,
 				147223782255EC2A002BDAC2 /* ViewController.m */,
+				147223A62255EC55002BDAC2 /* HeartGraphicsView.h */,
+				147223A72255EC55002BDAC2 /* HeartGraphicsView.m */,
 				1472237A2255EC2A002BDAC2 /* Main.storyboard */,
 				1472237D2255EC2C002BDAC2 /* Assets.xcassets */,
 				1472237F2255EC2C002BDAC2 /* LaunchScreen.storyboard */,
@@ -237,6 +245,7 @@
 			files = (
 				147223812255EC2C002BDAC2 /* LaunchScreen.storyboard in Resources */,
 				1472237E2255EC2C002BDAC2 /* Assets.xcassets in Resources */,
+				147223AA22560554002BDAC2 /* LBEData.txt in Resources */,
 				1472237C2255EC2A002BDAC2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,6 +273,7 @@
 			files = (
 				147223792255EC2A002BDAC2 /* ViewController.m in Sources */,
 				147223842255EC2C002BDAC2 /* main.m in Sources */,
+				147223A82255EC55002BDAC2 /* HeartGraphicsView.m in Sources */,
 				147223762255EC2A002BDAC2 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
