@@ -31,7 +31,6 @@
 - (void)createWorkDataSourceWithTimeInterval:(NSTimeInterval )timeInterval
 {
     [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerRefresnFun) userInfo:nil repeats:YES];
-    
 }
 //刷新方式绘制
 - (void)timerRefresnFun{
@@ -39,9 +38,9 @@
     CGPoint point = [self bubbleRefreshPoint];
     [[PointContainer sharedInstance] addPointAsRefreshChangeForm:point];
     //curve
-    CGPoint *refreshPoint = [PointContainer sharedInstance].refreshPointContainer;
+    CGPoint *curePoint = [PointContainer sharedInstance].refreshPointContainer;
     NSInteger numberOfRreshElements = [PointContainer sharedInstance].numberOfRreshElements;
-    [self.refreshMoniterView drawWithPoints:refreshPoint WithCount:numberOfRreshElements];
+    [self.refreshMoniterView drawWithPoints:curePoint WithCount:numberOfRreshElements];
 }
 
 - (CGPoint)bubbleRefreshPoint{
@@ -54,6 +53,7 @@
     //todo:动态
     CGFloat point_y = [self.dataSource[dataSourceCounterIndex] integerValue] * 0.5 + 120;
     CGPoint targetPointToAdd = (CGPoint){xCoordinateInMoniter,point_y};
+    
     xCoordinateInMoniter += pixelPerPoint;
     xCoordinateInMoniter %= (int)(CGRectGetWidth(self.refreshMoniterView.frame));
     return targetPointToAdd;
@@ -79,7 +79,7 @@
 
     NSLog(@"mArr.count=%ld",self.mArr.count);
     self.dataSource = self.mArr;
-    [self createWorkDataSourceWithTimeInterval:0.025];
+    [self createWorkDataSourceWithTimeInterval:0.02];
 
 }
 /**
