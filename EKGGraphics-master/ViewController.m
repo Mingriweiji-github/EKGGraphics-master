@@ -24,19 +24,26 @@
     
     [self.view addSubview:self.refreshMoniterView];
     self.title = @"心电图";
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor blackColor];
     
     [self readData];
 }
 - (void)createWorkDataSourceWithTimeInterval:(NSTimeInterval )timeInterval
 {
     [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerRefresnFun) userInfo:nil repeats:YES];
+    
 }
 //刷新方式绘制
 - (void)timerRefresnFun{
+    //grid
     CGPoint point = [self bubbleRefreshPoint];
     [[PointContainer sharedInstance] addPointAsRefreshChangeForm:point];
+    //curve
+    CGPoint *refreshPoint = [PointContainer sharedInstance].refreshPointContainer;
+    NSInteger numberOfRreshElements = [PointContainer sharedInstance].numberOfRreshElements;
+    [self.refreshMoniterView drawWithPoints:refreshPoint WithCount:numberOfRreshElements];
 }
+
 - (CGPoint)bubbleRefreshPoint{
     static NSInteger dataSourceCounterIndex = -1;
     dataSourceCounterIndex ++ ;
@@ -137,7 +144,7 @@
 {
     if (!_refreshMoniterView) {
         CGFloat xOffset = 10;
-        _refreshMoniterView = [[HeartGraphicsView alloc] initWithFrame:CGRectMake(xOffset, 120, CGRectGetWidth(self.view.frame) - 2 * xOffset, 200)];
+        _refreshMoniterView = [[HeartGraphicsView alloc] initWithFrame:CGRectMake(xOffset, 120, CGRectGetWidth(self.view.frame) / 2 - xOffset, 200)];
         _refreshMoniterView.backgroundColor = [UIColor blackColor];
     }
     return _refreshMoniterView;
