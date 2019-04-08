@@ -17,6 +17,7 @@
 		147223992255EC2C002BDAC2 /* EKGGraphics_masterUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 147223982255EC2C002BDAC2 /* EKGGraphics_masterUITests.m */; };
 		147223A82255EC55002BDAC2 /* HeartGraphicsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 147223A72255EC55002BDAC2 /* HeartGraphicsView.m */; };
 		147223AA22560554002BDAC2 /* LBEData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 147223A922560554002BDAC2 /* LBEData.txt */; };
+		50538773225B32F9003989E6 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50538772225B32F9003989E6 /* ExternalAccessory.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,8 @@
 		147223A62255EC55002BDAC2 /* HeartGraphicsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeartGraphicsView.h; sourceTree = "<group>"; };
 		147223A72255EC55002BDAC2 /* HeartGraphicsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HeartGraphicsView.m; sourceTree = "<group>"; };
 		147223A922560554002BDAC2 /* LBEData.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LBEData.txt; sourceTree = "<group>"; };
+		50538772225B32F9003989E6 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
+		50538774225B32F9003989E6 /* EKGGraphics-master.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "EKGGraphics-master.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50538773225B32F9003989E6 /* ExternalAccessory.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +94,7 @@
 				1472238C2255EC2C002BDAC2 /* EKGGraphics-masterTests */,
 				147223972255EC2C002BDAC2 /* EKGGraphics-masterUITests */,
 				147223722255EC2A002BDAC2 /* Products */,
+				50538771225B32F9003989E6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,6 +111,7 @@
 		147223732255EC2A002BDAC2 /* EKGGraphics-master */ = {
 			isa = PBXGroup;
 			children = (
+				50538774225B32F9003989E6 /* EKGGraphics-master.entitlements */,
 				147223A922560554002BDAC2 /* LBEData.txt */,
 				147223742255EC2A002BDAC2 /* AppDelegate.h */,
 				147223752255EC2A002BDAC2 /* AppDelegate.m */,
@@ -138,6 +144,14 @@
 				1472239A2255EC2C002BDAC2 /* Info.plist */,
 			);
 			path = "EKGGraphics-masterUITests";
+			sourceTree = "<group>";
+		};
+		50538771225B32F9003989E6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				50538772225B32F9003989E6 /* ExternalAccessory.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,6 +221,11 @@
 				TargetAttributes = {
 					147223702255EC2A002BDAC2 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.WAC = {
+								enabled = 1;
+							};
+						};
 					};
 					147223882255EC2C002BDAC2 = {
 						CreatedOnToolsVersion = 10.1;
@@ -445,6 +464,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "EKGGraphics-master/EKGGraphics-master.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YEFYT2Y9CS;
 				INFOPLIST_FILE = "EKGGraphics-master/Info.plist";
@@ -463,6 +483,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "EKGGraphics-master/EKGGraphics-master.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YEFYT2Y9CS;
 				INFOPLIST_FILE = "EKGGraphics-master/Info.plist";

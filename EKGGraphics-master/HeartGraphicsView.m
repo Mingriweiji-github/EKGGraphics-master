@@ -8,7 +8,7 @@
 
 #import "HeartGraphicsView.h"
 
-static const NSInteger kMaxContainCapacity = 150;
+static const NSInteger kMaxContainCapacity = 300;
 @interface PointContainer()
 @property (nonatomic, assign) NSInteger numberOfRreshElements;
 @property (nonatomic, assign) CGPoint* refreshPointContainer;
@@ -91,7 +91,7 @@ static const NSInteger kMaxContainCapacity = 150;
     CGContextSetLineWidth(currentContext, curveLineWidth);
     CGContextSetStrokeColorWithColor(currentContext, [UIColor greenColor].CGColor);
     
-    NSLog(@"currentPointsCount = %ld point is %@",self.currentPointsCount,NSStringFromCGPoint(*(self.points)));
+    NSLog(@"currentPointsCount = %ld point is %@",(long)self.currentPointsCount,NSStringFromCGPoint(*(self.points)));
     CGContextMoveToPoint(currentContext, self.points[0].x, self.points[0].y);
     
     for (int i = 1; i != self.currentPointsCount; ++i) {
