@@ -30,137 +30,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    
     [self.view addSubview:self.refreshMoniterView];
     self.title = @"心电图";
     self.view.backgroundColor = [UIColor blackColor];
-    
-//    [self readData];
-    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
+//测试数据
+    [self readData];
+//蓝牙数据
+//    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
 }
-- (void)createWorkDataSourceWithTimeInterval:(NSTimeInterval )timeInterval
-{
-    [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerRefresnFun) userInfo:nil repeats:YES];
-}
-//刷新方式绘制
-- (void)timerRefresnFun{
-    //grid
-    CGPoint point = [self bubbleRefreshPoint];
-    [[PointContainer sharedInstance] addPointAsRefreshChangeForm:point];
-    //curve
-    CGPoint *curePoint = [PointContainer sharedInstance].refreshPointContainer;
-    NSInteger numberOfRreshElements = [PointContainer sharedInstance].numberOfRreshElements;
-    [self.refreshMoniterView drawWithPoints:curePoint WithCount:numberOfRreshElements];
-}
-
-- (CGPoint)bubbleRefreshPoint{
-    static NSInteger dataSourceCounterIndex = -1;
-    dataSourceCounterIndex ++ ;
-    dataSourceCounterIndex %= [self.dataSource count];
-    
-    NSInteger pixelPerPoint = 1;
-    static NSInteger xCoordinateInMoniter = 0;
-    //todo:动态
-    CGFloat point_y = [self.dataSource[dataSourceCounterIndex] integerValue] * 0.5 + 120;
-    CGPoint targetPointToAdd = (CGPoint){xCoordinateInMoniter,point_y};
-    
-    xCoordinateInMoniter += pixelPerPoint;
-    xCoordinateInMoniter %= (int)(CGRectGetWidth(self.refreshMoniterView.frame));
-    return targetPointToAdd;
-}
-- (void)readData {
-    NSError *error;
-    NSString *text = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"LBEData" ofType:@"txt"] encoding:NSUTF8StringEncoding error:&error];
-    NSString *current = [text stringByReplacingOccurrencesOfString:@"-" withString:@""];
-
-    [current enumerateLinesUsingBlock:^(NSString * _Nonnull line, BOOL * _Nonnull stop) {
-        if ([line hasPrefix:@"AAAA"]) {
-            @autoreleasepool {
-                NSString *lbeString = [line substringWithRange:NSMakeRange(8, 300)];//前8位-2个16进制数对应设备信息不处理
-                [lbeString enumerateSubstringsInRange:NSMakeRange(0, lbeString.length) options:NSStringEnumerationByWords usingBlock:^(NSString * _Nullable substring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
-                    NSArray *tempData = [self praseHexWithContentString:substring withRatio:3];
-                    NSLog(@"tempData=%@",tempData);
-                    [self.mArr addObjectsFromArray:tempData];
-                }];
-
-            }
-        }
-    }];
-
-    NSLog(@"mArr.count=%ld",self.mArr.count);
-    self.dataSource = self.mArr;
-    [self createWorkDataSourceWithTimeInterval:0.03];
-
-}
-/**
- 第一步：16进制转NSData
- */
-- (NSData *)dataFromHexString:(NSString *)hexString{
-    const char * chars = [hexString UTF8String];
-    int i = 0;
-    NSUInteger len = hexString.length;
-    
-    NSMutableData *data = [NSMutableData dataWithCapacity:len / 2];
-    char byteCharts[3] = {'\0','\0','\0'};
-    unsigned long wholeByte;
-    
-    while (i < len) {
-        byteCharts[0] = chars[i++];
-        byteCharts[1] = chars[i++];
-        wholeByte = strtoul(byteCharts, NULL, 16);
-        [data appendBytes:&wholeByte length:1];
-    }
-    return data;
-}
-/**
- 第二步：2进制转int
- */
-- (unsigned)parseIntFromData:(NSData *)data{
-    NSString *dataDescription = [data description];
-    NSString *dataString = [dataDescription substringWithRange:NSMakeRange(1, [dataDescription length] - 2)];
-    
-    unsigned intData = 0;
-    NSScanner *scanner = [NSScanner scannerWithString:dataString];
-    [scanner scanHexInt:&intData];
-    return intData;
-}
-/**
- 第三步：int ->short
- @param string HexString
- @return short 数组
- */
-- (NSArray *)praseHexWithContentString:(NSString *)string withRatio:(int)ratio{
-    NSString *tempString = string;
-    NSInteger size = tempString.length / 4;
-    NSMutableArray *tempArr = [NSMutableArray array];
-    for (int n = 0; n < size; n++) {
-        NSString *hexString = [tempString substringWithRange:NSMakeRange(n * 4, 4)];
-        NSData *tempData = [self dataFromHexString:hexString];
-        unsigned num = [self parseIntFromData:tempData];
-        //int ->short
-        short shortNum = ((short)num) / ratio;
-        
-        [tempArr addObject:[NSString stringWithFormat:@"%d",shortNum]];
-    }
-    return tempArr;
-}
-- (NSMutableArray *)mArr {
-    if (_mArr == nil) {
-        _mArr = [NSMutableArray array];
-    }
-    return _mArr;
-}
-- (HeartGraphicsView *)refreshMoniterView
-{
-    if (!_refreshMoniterView) {
-        CGFloat xOffset = 10;
-        _refreshMoniterView = [[HeartGraphicsView alloc] initWithFrame:CGRectMake(xOffset, 120, CGRectGetWidth(self.view.frame)  - 2 * xOffset, 200)];
-        _refreshMoniterView.backgroundColor = [UIColor blackColor];
-    }
-    return _refreshMoniterView;
-}
-
-#pragma mark - Delegate
+#pragma mark - CBCentralManagerDelegate
 /**
  1.扫描外设
  @param central CBCentralManager
@@ -232,8 +110,8 @@
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error{
     NSLog(@"取消了回调=%@",peripheral);
 }
-#pragma mark - peripheralDelegate
 
+#pragma mark - CBPeripheralDelegate
 /**
  4.获取外设服务
  */
@@ -278,14 +156,22 @@
  */
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
     NSLog(@"characteristic uuid:%@  value:%@",characteristic.UUID,characteristic.value);
-    
-    NSString *content = [NSString stringWithFormat:@"%@",characteristic.value];
-    NSString *temp = [content stringByReplacingOccurrencesOfString:@" " withString:@""];
-    temp = [temp substringFromIndex:1];
-    temp = [temp substringToIndex:temp.length - 1];
-    NSString *lbeString = [temp substringWithRange:NSMakeRange(8, 300)];//前8位的16进制数设备信息不处理
-    NSArray *tempData = [self praseHexWithContentString:lbeString withRatio:1];
-    NSLog(@"tempArr = %@",tempData);
+    if ([characteristic.UUID.UUIDString isEqualToString:@"6E400003-B5A3-F393-E0A9-E50E24DCCA9E"]) {
+            NSString *content = [NSString stringWithFormat:@"%@",characteristic.value];
+            NSString *temp = [content stringByReplacingOccurrencesOfString:@" " withString:@""];
+            temp = [temp substringFromIndex:1];
+            temp = [temp substringToIndex:temp.length - 1];
+            if (temp.length == 308) {
+                NSString *lbeString = [temp substringWithRange:NSMakeRange(8, 300)];//前8位的16进制数设备信息不处理
+                NSArray *tempData = [self praseHexWithContentString:lbeString withRatio:1];
+                NSLog(@"tempArr = %@",tempData);
+                [self.mArr addObjectsFromArray:tempData];
+                self.dataSource = self.mArr;
+                [self createWorkDataSourceWithTimeInterval:0.1];
+            }else{
+                NSAssert(temp.length != 308, @"接受到数据但是非标准长度");
+            }
+    }
 }
 //搜索到Characteristic的Descriptors
 -(void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
@@ -327,21 +213,18 @@
         NSLog(@"该字段不可写！");
     }
 }
-//设置通知
+//设置peripheral通知
 -(void)notifyCharacteristic:(CBPeripheral *)peripheral
              characteristic:(CBCharacteristic *)characteristic{
     //设置通知，数据通知会进入：didUpdateValueForCharacteristic方法
     [peripheral setNotifyValue:YES forCharacteristic:characteristic];
     [self.ctrlManager stopScan];
 }
-
 //取消通知
 -(void)cancelNotifyCharacteristic:(CBPeripheral *)peripheral
                    characteristic:(CBCharacteristic *)characteristic{
-    
     [peripheral setNotifyValue:NO forCharacteristic:characteristic];
 }
-
 //停止扫描并断开连接
 -(void)disconnectPeripheral:(CBCentralManager *)centralManager
                  peripheral:(CBPeripheral *)peripheral{
@@ -349,5 +232,129 @@
     [centralManager stopScan];
     //断开连接
     [centralManager cancelPeripheralConnection:peripheral];
+}
+
+#pragma mark - 测试数据
+
+- (void)readData {
+    NSError *error;
+    NSString *text = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"LBEData" ofType:@"txt"] encoding:NSUTF8StringEncoding error:&error];
+    NSString *current = [text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    
+    [current enumerateLinesUsingBlock:^(NSString * _Nonnull line, BOOL * _Nonnull stop) {
+        if ([line hasPrefix:@"AAAA"]) {
+            @autoreleasepool {
+                NSString *lbeString = [line substringWithRange:NSMakeRange(8, 300)];//前8位-2个16进制数对应设备信息不处理
+                [lbeString enumerateSubstringsInRange:NSMakeRange(0, lbeString.length) options:NSStringEnumerationByWords usingBlock:^(NSString * _Nullable substring, NSRange substringRange, NSRange enclosingRange, BOOL * _Nonnull stop) {
+                    NSArray *tempData = [self praseHexWithContentString:substring withRatio:3];
+                    NSLog(@"tempData=%@",tempData);
+                    [self.mArr addObjectsFromArray:tempData];
+                }];
+                
+            }
+        }
+    }];
+    
+    NSLog(@"mArr.count=%ld",self.mArr.count);
+    self.dataSource = self.mArr;
+    
+    [self createWorkDataSourceWithTimeInterval:0.025];
+    
+}
+- (void)createWorkDataSourceWithTimeInterval:(NSTimeInterval )timeInterval{
+    [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerRefresnFun) userInfo:nil repeats:YES];
+}
+//刷新方式绘制
+- (void)timerRefresnFun{
+    //坐标点
+    CGPoint point = [self bubbleRefreshPoint];
+    [[PointContainer sharedInstance] addPointAsRefreshChangeForm:point];
+    //绘图点坐标
+    CGPoint *curePoint = [PointContainer sharedInstance].refreshPointContainer;
+    NSInteger numberOfRreshElements = [PointContainer sharedInstance].numberOfRreshElements;
+    [self.refreshMoniterView drawWithPoints:curePoint WithCount:numberOfRreshElements];
+}
+- (CGPoint)bubbleRefreshPoint{
+    static NSInteger dataSourceCounterIndex = -1;
+    dataSourceCounterIndex ++ ;
+    dataSourceCounterIndex %= [self.dataSource count];
+    NSInteger pixelPerPoint = 1;
+    static NSInteger xCoordinateInMoniter = 0;
+    //todo:动态
+    //    CGFloat point_y = [self.dataSource[dataSourceCounterIndex] integerValue];
+    CGFloat point_y = [self.dataSource[dataSourceCounterIndex] integerValue] * 0.5 + 120;
+    CGPoint targetPointToAdd = (CGPoint){xCoordinateInMoniter,point_y};
+    xCoordinateInMoniter += pixelPerPoint;
+    xCoordinateInMoniter %= (int)(CGRectGetWidth(self.refreshMoniterView.frame));
+    return targetPointToAdd;
+}
+
+/**
+ 第一步：16进制转NSData
+ */
+- (NSData *)dataFromHexString:(NSString *)hexString{
+    const char * chars = [hexString UTF8String];
+    int i = 0;
+    NSUInteger len = hexString.length;
+    
+    NSMutableData *data = [NSMutableData dataWithCapacity:len / 2];
+    char byteCharts[3] = {'\0','\0','\0'};
+    unsigned long wholeByte;
+    
+    while (i < len) {
+        byteCharts[0] = chars[i++];
+        byteCharts[1] = chars[i++];
+        wholeByte = strtoul(byteCharts, NULL, 16);
+        [data appendBytes:&wholeByte length:1];
+    }
+    return data;
+}
+/**
+ 第二步：2进制转int
+ */
+- (unsigned)parseIntFromData:(NSData *)data{
+    NSString *dataDescription = [data description];
+    NSString *dataString = [dataDescription substringWithRange:NSMakeRange(1, [dataDescription length] - 2)];
+    
+    unsigned intData = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:dataString];
+    [scanner scanHexInt:&intData];
+    return intData;
+}
+/**
+ 第三步：int ->short
+ @param string HexString
+ @return short 数组
+ */
+- (NSArray *)praseHexWithContentString:(NSString *)string withRatio:(int)ratio{
+    NSString *tempString = string;
+    NSInteger size = tempString.length / 4;
+    NSMutableArray *tempArr = [NSMutableArray array];
+    for (int n = 0; n < size; n++) {
+        NSString *hexString = [tempString substringWithRange:NSMakeRange(n * 4, 4)];
+        NSData *tempData = [self dataFromHexString:hexString];
+        unsigned num = [self parseIntFromData:tempData];
+        //int ->short
+        short shortNum = ((short)num) / ratio;
+        
+        [tempArr addObject:[NSString stringWithFormat:@"%d",shortNum]];
+    }
+    return tempArr;
+}
+#pragma mark - setter & getter
+- (NSMutableArray *)mArr {
+    if (_mArr == nil) {
+        _mArr = [NSMutableArray array];
+    }
+    return _mArr;
+}
+- (HeartGraphicsView *)refreshMoniterView
+{
+    if (!_refreshMoniterView) {
+        CGFloat xOffset = 10;
+        _refreshMoniterView = [[HeartGraphicsView alloc] initWithFrame:CGRectMake(xOffset, 120, CGRectGetWidth(self.view.frame)  - xOffset * 2 - 20, 200)];
+        _refreshMoniterView.backgroundColor = [UIColor blackColor];
+    }
+    return _refreshMoniterView;
 }
 @end

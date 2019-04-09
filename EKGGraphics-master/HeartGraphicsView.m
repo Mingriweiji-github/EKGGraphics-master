@@ -109,26 +109,27 @@ static const NSInteger kMaxContainCapacity = 300;
  */
 - (void)drawGrid {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(ctx, 1.0f);
+    CGContextSetLineWidth(ctx, 0.5f);
     CGContextSetStrokeColorWithColor(ctx, [UIColor whiteColor].CGColor);
     //todo:text
     self.full_width = self.frame.size.width;
     self.full_height = self.frame.size.height;
-    self.cell_square_width = self.full_width / 7 ;
+    
+    self.cell_square_width = 20 ;
     
     CGFloat pos_x = 1;
-    while (pos_x < self.cell_square_width * 8) {//所有的Y轴
+    while (pos_x < self.full_width) {//所有的Y轴
         CGContextMoveToPoint(ctx, pos_x, 1);
-        CGContextAddLineToPoint(ctx, pos_x, self.cell_square_width * 7);
+        CGContextAddLineToPoint(ctx, pos_x, self.full_height);
         pos_x += _cell_square_width;
         CGContextStrokePath(ctx);
     }
     
     CGFloat pos_y = 1;
-    while (pos_y < self.cell_square_width * 8) {//所有的X轴
+    while (pos_y < self.full_height) {//所有的X轴
         CGContextSetLineWidth(ctx, 1);
         CGContextMoveToPoint(ctx, 1, pos_y);
-        CGContextAddLineToPoint(ctx, self.cell_square_width * 7, pos_y);
+        CGContextAddLineToPoint(ctx, self.full_width, pos_y);
         pos_y += _cell_square_width;
         CGContextStrokePath(ctx);
     }
