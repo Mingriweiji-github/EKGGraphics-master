@@ -23,7 +23,6 @@
 @property (nonatomic, strong) NSMutableDictionary *deviceDic;
 @property (nonatomic, strong) NSMutableArray *peripherals;
 
-
 @end
 
 @implementation ViewController
@@ -37,16 +36,7 @@
     self.view.backgroundColor = [UIColor blackColor];
     
 //    [self readData];
-    
-//    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
-    
-    NSString *content = @"aaaa01a0 000d000a 000b000a 000b000b 000a000b 000c000c 0009000c 0007000c 000a000d 0009000c 000a000d 000a000c 000d000c 000d000b 000a000a 000e000a 000b000d 000c000b 000a000b 0007000b 000c000c 000c000b 000c000b 000d000b 000a000b 000a000b 000d000b 000e000b 000e000b 000a000a 000d000b 000c000b 000b000b 000b000d 000c0009 000b000b 000e000a 000d0009 000d";
-    //    NSString *content = [NSString stringWithFormat:@"%@",characteristic.value];
-    NSString *temp = [content stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"temp=%@",temp);
-    NSString *lbeString = [temp substringWithRange:NSMakeRange(8, 300)];//前8位-2个16进制数对应设备信息不处理
-    NSArray *tempData = [self praseHexWithContentString:lbeString withRatio:1];
-    NSLog(@"tempArr = %@",tempData);
+    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
 }
 - (void)createWorkDataSourceWithTimeInterval:(NSTimeInterval )timeInterval
 {
@@ -281,17 +271,21 @@
         }
     }
 }
-#pragma mark - 获取的l外设charateristic的值
+#pragma mark - 获取的外设特征的value值
 /**
- !注意，value的类型是NSData，具体开发时，会根据外设协议制定的方式去解析数据
+ 注意: value的类型是NSData，具体开发时，会根据外设协议制定的方式去解析数据
+ value: <aaaa01a0 000d000a 000b000a 000b000b 000a000b 000c000c 0009000c 0007000c 000a000d 0009000c 000a000d 000a000c 000d000c 000d000b 000a000a 000e000a 000b000d 000c000b 000a000b 0007000b 000c000c 000c000b 000c000b 000d000b 000a000b 000a000b 000d000b 000e000b 000e000b 000a000a 000d000b 000c000b 000b000b 000b000d 000c0009 000b000b 000e000a 000d0009 000d>
  */
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
     NSLog(@"characteristic uuid:%@  value:%@",characteristic.UUID,characteristic.value);
-    /*NSData
-     value:<aaaa01a0 000d000a 000b000a 000b000b 000a000b 000c000c 0009000c 0007000c 000a000d 0009000c 000a000d 000a000c 000d000c 000d000b 000a000a 000e000a 000b000d 000c000b 000a000b 0007000b 000c000c 000c000b 000c000b 000d000b 000a000b 000a000b 000d000b 000e000b 000e000b 000a000a 000d000b 000c000b 000b000b 000b000d 000c0009 000b000b 000e000a 000d0009 000d>
-     */
     
-    
+    NSString *content = [NSString stringWithFormat:@"%@",characteristic.value];
+    NSString *temp = [content stringByReplacingOccurrencesOfString:@" " withString:@""];
+    temp = [temp substringFromIndex:1];
+    temp = [temp substringToIndex:temp.length - 1];
+    NSString *lbeString = [temp substringWithRange:NSMakeRange(8, 300)];//前8位的16进制数设备信息不处理
+    NSArray *tempData = [self praseHexWithContentString:lbeString withRatio:1];
+    NSLog(@"tempArr = %@",tempData);
 }
 //搜索到Characteristic的Descriptors
 -(void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
