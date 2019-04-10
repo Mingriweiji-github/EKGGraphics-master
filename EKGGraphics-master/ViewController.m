@@ -37,6 +37,9 @@
 //    [self readData];
 //蓝牙数据
     self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
+    
+    [self createWorkDataSourceWithTimeInterval:0.01];
+
 }
 #pragma mark - CBCentralManagerDelegate
 /**
@@ -227,7 +230,6 @@
             NSLog(@"tempArr = %@",tempData);
             [self.mArr addObjectsFromArray:tempData];
             self.dataSource = self.mArr;
-            [self createWorkDataSourceWithTimeInterval:0.035];
         }else{
             NSAssert(temp.length != 308, @"接受到数据但是非标准长度");
         }
@@ -257,8 +259,6 @@
     
     NSLog(@"mArr.count=%lu",(unsigned long)self.mArr.count);
     self.dataSource = self.mArr;
-    
-    [self createWorkDataSourceWithTimeInterval:0.04];
     
 }
 - (void)createWorkDataSourceWithTimeInterval:(NSTimeInterval )timeInterval{
