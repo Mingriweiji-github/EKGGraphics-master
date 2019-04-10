@@ -34,9 +34,9 @@
     self.title = @"心电图";
     self.view.backgroundColor = [UIColor blackColor];
 //测试数据
-    [self readData];
+//    [self readData];
 //蓝牙数据
-//    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
+    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
 }
 #pragma mark - CBCentralManagerDelegate
 /**
@@ -223,11 +223,11 @@
         temp = [temp substringToIndex:temp.length - 1];
         if (temp.length == 308) {
             NSString *lbeString = [temp substringWithRange:NSMakeRange(8, 300)];//前8位的16进制数设备信息不处理
-            NSArray *tempData = [self praseHexWithContentString:lbeString withRatio:1];
+            NSArray *tempData = [self praseHexWithContentString:lbeString withRatio:3];
             NSLog(@"tempArr = %@",tempData);
             [self.mArr addObjectsFromArray:tempData];
             self.dataSource = self.mArr;
-            [self createWorkDataSourceWithTimeInterval:0.1];
+            [self createWorkDataSourceWithTimeInterval:0.035];
         }else{
             NSAssert(temp.length != 308, @"接受到数据但是非标准长度");
         }
@@ -255,10 +255,10 @@
         }
     }];
     
-    NSLog(@"mArr.count=%ld",self.mArr.count);
+    NSLog(@"mArr.count=%lu",(unsigned long)self.mArr.count);
     self.dataSource = self.mArr;
     
-    [self createWorkDataSourceWithTimeInterval:0.025];
+    [self createWorkDataSourceWithTimeInterval:0.04];
     
 }
 - (void)createWorkDataSourceWithTimeInterval:(NSTimeInterval )timeInterval{
