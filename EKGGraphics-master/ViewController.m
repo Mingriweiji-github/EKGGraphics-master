@@ -33,10 +33,14 @@
     [self.view addSubview:self.refreshMoniterView];
     self.title = @"心电图";
     self.view.backgroundColor = [UIColor blackColor];
-//测试数据
+#if TARGET_IPHONE_SIMULATOR
+    //测试数据
     [self readData];
-//蓝牙数据
-//    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
+#define SIMULATOR_TEST
+#else
+    //蓝牙数据
+    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
+#endif
     
     [self createWorkDataSourceWithTimeInterval:0.01];
 
