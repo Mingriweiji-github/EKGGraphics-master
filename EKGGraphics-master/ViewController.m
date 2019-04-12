@@ -39,9 +39,7 @@
 #else
     self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];    //蓝牙数据
 #endif
-    
-    [self createWorkDataSourceWithTimeInterval:0.01];
-
+    [self createWorkDataSourceWithTimeInterval:0.01 * 2];
 }
 #pragma mark - CBCentralManagerDelegate
 /**
@@ -357,7 +355,8 @@
 {
     if (!_refreshMoniterView) {
         CGFloat xOffset = 10;
-        _refreshMoniterView = [[HeartGraphicsView alloc] initWithFrame:CGRectMake(xOffset, 120, CGRectGetWidth(self.view.frame)  - xOffset * 2 - 20, 200)];
+        CGFloat width = CGRectGetWidth(self.view.frame)  - xOffset * 2 - 20;
+        _refreshMoniterView = [[HeartGraphicsView alloc] initWithFrame:CGRectMake(xOffset, 120, width * 0.5 , 200)];
         _refreshMoniterView.backgroundColor = [UIColor blackColor];
     }
     return _refreshMoniterView;

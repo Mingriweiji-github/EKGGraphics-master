@@ -8,7 +8,9 @@
 
 #import "HeartGraphicsView.h"
 
-static const NSInteger kMaxContainCapacity = 350;
+static const double kScale = 0.5;
+static const NSInteger kMaxContainCapacity = 360;
+
 @interface PointContainer()
 @property (nonatomic, assign) NSInteger numberOfRreshElements;
 @property (nonatomic, assign) CGPoint* refreshPointContainer;
@@ -91,11 +93,12 @@ static const NSInteger kMaxContainCapacity = 350;
     CGContextSetLineWidth(currentContext, curveLineWidth);
     CGContextSetStrokeColorWithColor(currentContext, [UIColor greenColor].CGColor);
     
-    NSLog(@"currentPointsCount = %ld point is %@",(long)self.currentPointsCount,NSStringFromCGPoint(*(self.points)));
+    //开始绘制
+    NSLog(@"开始：%@",NSStringFromCGPoint(*(self.points)));
     CGContextMoveToPoint(currentContext, self.points[0].x, self.points[0].y);
-    
-    for (int i = 1; i != self.currentPointsCount; ++i) {
+    for (int i = 1; i <= self.currentPointsCount * kScale; ++i) {//scale
         if (self.points[i-1].x < self.points[i].x) {
+//            NSLog(@"Pi-1=%@, Pi=%@",NSStringFromCGPoint(self.points[i-1]),NSStringFromCGPoint(self.points[i]));
             CGContextAddLineToPoint(currentContext, self.points[i].x, self.points[i].y);
         }else{//重新绘制坐标
             CGContextMoveToPoint(currentContext, self.points[i].x, self.points[i].y);
@@ -115,7 +118,7 @@ static const NSInteger kMaxContainCapacity = 350;
     self.full_width = self.frame.size.width;
     self.full_height = self.frame.size.height;
     
-    self.cell_square_width = 30 ;//默认1大格子对应的物理像素
+    self.cell_square_width = 30 * kScale;//默认1大格子对应的物理像素 Scale
     
     CGFloat pos_x = 1;
     while (pos_x < self.full_width) {//所有的Y轴
@@ -134,22 +137,22 @@ static const NSInteger kMaxContainCapacity = 350;
         CGContextStrokePath(ctx);
     }
     
-//    CGContextSetLineWidth(ctx, 0.5);
-//    _cell_square_width = _cell_square_width / 5;
-//    pos_x = 1 + _cell_square_width;
-//    while (pos_x < _full_width) {
-//        CGContextMoveToPoint(ctx, pos_x, 1);
-//        CGContextAddLineToPoint(ctx, pos_x, _full_height);
-//        pos_x += _cell_square_width;
-//        CGContextStrokePath(ctx);
-//    }
-//    pos_y = 1 + _cell_square_width;
-//    while (pos_y <= _full_height) {
-//        CGContextMoveToPoint(ctx, 1, pos_y);
-//        CGContextAddLineToPoint(ctx, _full_width, pos_y);
-//        pos_y += _cell_square_width;
-//        CGContextStrokePath(ctx);
-//    }
+    CGContextSetLineWidth(ctx, 0.5);
+    _cell_square_width = _cell_square_width / 5;
+    pos_x = 1 + _cell_square_width;
+    while (pos_x < _full_width) {
+        CGContextMoveToPoint(ctx, pos_x, 1);
+        CGContextAddLineToPoint(ctx, pos_x, _full_height);
+        pos_x += _cell_square_width;
+        CGContextStrokePath(ctx);
+    }
+    pos_y = 1 + _cell_square_width;
+    while (pos_y <= _full_height) {
+        CGContextMoveToPoint(ctx, 1, pos_y);
+        CGContextAddLineToPoint(ctx, _full_width, pos_y);
+        pos_y += _cell_square_width;
+        CGContextStrokePath(ctx);
+    }
     
 }
 @end
