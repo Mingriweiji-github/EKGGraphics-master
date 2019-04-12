@@ -34,12 +34,10 @@
     self.title = @"心电图";
     self.view.backgroundColor = [UIColor blackColor];
 #if TARGET_IPHONE_SIMULATOR
-    //测试数据
-    [self readData];
+    [self readData];//测试数据
 #define SIMULATOR_TEST
 #else
-    //蓝牙数据
-    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
+    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];    //蓝牙数据
 #endif
     
     [self createWorkDataSourceWithTimeInterval:0.01];
