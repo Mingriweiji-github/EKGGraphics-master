@@ -8,7 +8,7 @@
 
 #import "HeartGraphicsView.h"
 
-static const NSInteger kMaxContainCapacity = 300;
+static const NSInteger kMaxContainCapacity = 350;
 @interface PointContainer()
 @property (nonatomic, assign) NSInteger numberOfRreshElements;
 @property (nonatomic, assign) CGPoint* refreshPointContainer;
@@ -115,7 +115,7 @@ static const NSInteger kMaxContainCapacity = 300;
     self.full_width = self.frame.size.width;
     self.full_height = self.frame.size.height;
     
-    self.cell_square_width = 20 ;
+    self.cell_square_width = 30 ;//默认1大格子对应的物理像素
     
     CGFloat pos_x = 1;
     while (pos_x < self.full_width) {//所有的Y轴
