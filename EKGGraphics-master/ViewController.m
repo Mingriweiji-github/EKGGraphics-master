@@ -33,12 +33,14 @@
     [self.view addSubview:self.refreshMoniterView];
     self.title = @"心电图";
     self.view.backgroundColor = [UIColor blackColor];
-#if TARGET_IPHONE_SIMULATOR
+    
     [self readData];//测试数据
-#define SIMULATOR_TEST
-#else
-    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];    //蓝牙数据
-#endif
+//#if TARGET_IPHONE_SIMULATOR
+//    [self readData];//测试数据
+//#define SIMULATOR_TEST
+//#else
+//    self.ctrlManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];    //蓝牙数据
+//#endif
     [self createWorkDataSourceWithTimeInterval:0.01 * 2];
 }
 #pragma mark - CBCentralManagerDelegate
@@ -282,13 +284,18 @@
     static NSInteger dataSourceCounterIndex = -1;
     dataSourceCounterIndex ++ ;
     dataSourceCounterIndex %= [self.dataSource count];
-    NSInteger pixelPerPoint = 1;
-    static NSInteger xCoordinateInMoniter = 0;
+    double pixelPerPoint = 1;
+    static double xCoordinateInMoniter = 0;
     //todo:动态
     CGFloat point_y = [self.dataSource[dataSourceCounterIndex] integerValue] * 0.5 + 120;
     CGPoint targetPointToAdd = (CGPoint){xCoordinateInMoniter,point_y};
-    xCoordinateInMoniter += pixelPerPoint;
-    xCoordinateInMoniter %= (int)(CGRectGetWidth(self.refreshMoniterView.frame));
+    if (xCoordinateInMoniter > self.refreshMoniterView.bounds.size.width) {
+        xCoordinateInMoniter = 0;
+    }
+    targetPointToAdd = (CGPoint){xCoordinateInMoniter,point_y};
+//    NSLog(@"bubble point is:%@",NSStringFromCGPoint(targetPointToAdd));
+    xCoordinateInMoniter += pixelPerPoint * 0.5;
+//    xCoordinateInMoniter %= (double)(CGRectGetWidth(self.refreshMoniterView.frame));
     return targetPointToAdd;
 }
 
@@ -356,7 +363,7 @@
     if (!_refreshMoniterView) {
         CGFloat xOffset = 10;
         CGFloat width = CGRectGetWidth(self.view.frame)  - xOffset * 2 - 20;
-        _refreshMoniterView = [[HeartGraphicsView alloc] initWithFrame:CGRectMake(xOffset, 120, width * 0.5 , 200)];
+        _refreshMoniterView = [[HeartGraphicsView alloc] initWithFrame:CGRectMake(xOffset, 120, width * 0.5, 200)];
         _refreshMoniterView.backgroundColor = [UIColor blackColor];
     }
     return _refreshMoniterView;
