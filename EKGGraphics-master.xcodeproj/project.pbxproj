@@ -18,6 +18,7 @@
 		147223A82255EC55002BDAC2 /* HeartGraphicsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 147223A72255EC55002BDAC2 /* HeartGraphicsView.m */; };
 		147223AA22560554002BDAC2 /* LBEData.txt in Resources */ = {isa = PBXBuildFile; fileRef = 147223A922560554002BDAC2 /* LBEData.txt */; };
 		50538773225B32F9003989E6 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50538772225B32F9003989E6 /* ExternalAccessory.framework */; };
+		5073BAC82264552400EF6793 /* HeartLiveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5073BAC72264552400EF6793 /* HeartLiveView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,8 @@
 		147223A922560554002BDAC2 /* LBEData.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LBEData.txt; sourceTree = "<group>"; };
 		50538772225B32F9003989E6 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		50538774225B32F9003989E6 /* EKGGraphics-master.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "EKGGraphics-master.entitlements"; sourceTree = "<group>"; };
+		5073BAC62264552400EF6793 /* HeartLiveView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeartLiveView.h; sourceTree = "<group>"; };
+		5073BAC72264552400EF6793 /* HeartLiveView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HeartLiveView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +122,8 @@
 				147223782255EC2A002BDAC2 /* ViewController.m */,
 				147223A62255EC55002BDAC2 /* HeartGraphicsView.h */,
 				147223A72255EC55002BDAC2 /* HeartGraphicsView.m */,
+				5073BAC62264552400EF6793 /* HeartLiveView.h */,
+				5073BAC72264552400EF6793 /* HeartLiveView.m */,
 				1472237A2255EC2A002BDAC2 /* Main.storyboard */,
 				1472237D2255EC2C002BDAC2 /* Assets.xcassets */,
 				1472237F2255EC2C002BDAC2 /* LaunchScreen.storyboard */,
@@ -290,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5073BAC82264552400EF6793 /* HeartLiveView.m in Sources */,
 				147223792255EC2A002BDAC2 /* ViewController.m in Sources */,
 				147223842255EC2C002BDAC2 /* main.m in Sources */,
 				147223A82255EC55002BDAC2 /* HeartGraphicsView.m in Sources */,

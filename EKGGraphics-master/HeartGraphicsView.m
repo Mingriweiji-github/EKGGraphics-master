@@ -8,8 +8,7 @@
 
 #import "HeartGraphicsView.h"
 
-static const double kScale = 1;
-static const NSInteger kMaxContainCapacity = 360;
+static const NSInteger kMaxContainCapacity = 300;
 
 @interface PointContainer()
 @property (nonatomic, assign) NSInteger numberOfRreshElements;
@@ -92,7 +91,6 @@ static const NSInteger kMaxContainCapacity = 360;
     CGContextRef currentContext = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(currentContext, curveLineWidth);
     CGContextSetStrokeColorWithColor(currentContext, [UIColor greenColor].CGColor);
-    
     //开始绘制
     NSLog(@"开始：%@",NSStringFromCGPoint(*(self.points)));
     CGContextMoveToPoint(currentContext, self.points[0].x, self.points[0].y);
@@ -104,8 +102,6 @@ static const NSInteger kMaxContainCapacity = 360;
             CGContextMoveToPoint(currentContext, self.points[i].x, self.points[i].y);
         }
     }
-    
-    
     CGContextStrokePath(currentContext);
 }
 
@@ -120,7 +116,7 @@ static const NSInteger kMaxContainCapacity = 360;
     self.full_width = self.frame.size.width;
     self.full_height = self.frame.size.height;
     
-    self.cell_square_width = 30 * 0.5;//默认1大格子对应的物理像素 Scale
+    self.cell_square_width = 30 * 0.5;//默认1大格子对应的物理像素 scale
     
     CGFloat pos_x = 1;
     while (pos_x < self.full_width) {//所有的Y轴
